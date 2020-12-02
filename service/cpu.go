@@ -120,6 +120,8 @@ func freq() *Freq {
 }
 
 func GetCPU() {
+	logger.Info(cpu.Info())
+	return
 	time.Sleep(time.Second)
 	for {
 		logger.Info(cpuLoad())

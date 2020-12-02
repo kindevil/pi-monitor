@@ -2,9 +2,11 @@ package main
 
 import (
 	"pi-monitor/service"
+
+	"github.com/wonderivan/logger"
 )
 
 func main() {
-	service.GetCPU()
+	logger.Info(service.GetHost())
 	//route.Run()
 }
