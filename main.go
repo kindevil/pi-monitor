@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "pi-monitor/route"
 
+func main() {
+	route.Run()
 }
