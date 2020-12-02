@@ -2,7 +2,6 @@ package service
 
 import (
 	"strconv"
-	"time"
 
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
@@ -119,14 +118,7 @@ func freq() *Freq {
 	return f
 }
 
-func GetCPU() {
-	logger.Info(cpu.Info())
-	return
-	time.Sleep(time.Second)
-	for {
-		logger.Info(cpuLoad())
-		time.Sleep(time.Second)
-	}
+func GetCPU() *CPU {
 	cpu := &CPU{
 		Cores:   cpuCount(false),
 		Threads: cpuCount(false),
@@ -134,9 +126,5 @@ func GetCPU() {
 		Load:    cpuLoad(),
 		Temp:    cpuTemperature(),
 	}
-	logger.Info(cpu.Cores)
-	logger.Info(cpu.Threads)
-	logger.Info(cpu.Freq)
-	logger.Info(cpu.Load)
-	logger.Info(cpu.Temp)
+	return cpu
 }
