@@ -1,7 +1,10 @@
 package main
 
-import "pi-monitor/route"
+import (
+	"pi-monitor/service"
+)
 
 func main() {
-	route.Run()
+	service.GetCPU()
+	//route.Run()
 }
