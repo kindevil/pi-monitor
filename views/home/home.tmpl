@@ -7,10 +7,10 @@
                     <div class="card-body gauge-card-body">
                         <h5 class="card-title gauge-card-title mb-3">树莓派信息</h5>
                         <ul class="list-unstyled host-info">
-                            <li class="text-white text-center p-1" style="background-color: #f05454;"><small class="host-info-title">版本</small> <span class="host-info-content">Raspberrypi 3B plus</span></li>
-                            <li class="text-white text-center p-1" style="background-color: #30475e;"><small>主机名</small> <span class="host-info-content">Raspberrypi</span></li>
-                            <li class="text-white text-center p-1" style="background-color: #fd8c04;"><small>IP地址</small> <span class="host-info-content">192.168.1.123</span></li>
-                            <li class="text-white text-center p-1" style="background-color: #16697a;"><small>OS</small> <span class="host-info-content">Linux</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #f05454;"><small class="host-info-title">版本</small> <span class="host-info-content">{{.version}}</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #30475e;"><small>主机名</small> <span class="host-info-content">{{.hostname}}</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #fd8c04;"><small>序列号</small> <span class="host-info-content">{{.serial}}</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #16697a;"><small>OS</small> <span class="host-info-content">{{.os}}</span></li>
                         </ul>
                     </div>
                 </div>
