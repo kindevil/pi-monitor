@@ -1,6 +1,6 @@
 /*
  * @Author: jia
- * @LastEditTime: 2020-12-08 13:55:14
+ * @LastEditTime: 2020-12-08 14:10:38
  * @FilePath: /pi-monitor/service/mem.go
  * @Date: 2020-12-08 13:39:02
  * @Software: VS Code
@@ -32,16 +32,16 @@ func GetMem() *Memory {
 	}
 
 	mem := &Memory{
-		Total:       v.Total,
-		Used:        v.Used,
-		Free:        v.Free,
-		Shared:      v.Shared,
-		Buffer:      v.Buffers,
-		Available:   v.Available,
-		UsedPercent: v.UsedPercent,
-		SwapTotal:   v.SwapTotal,
-		SwapFree:    v.SwapFree,
-		SwapCached:  v.SwapCached,
+		Total:       v.Total / 1024 / 1024,
+		Used:        v.Used / 1024 / 1024,
+		Free:        v.Free / 1024 / 1024,
+		Shared:      v.Shared / 1024 / 1024,
+		Buffer:      v.Buffers / 1024 / 1024,
+		Available:   v.Available / 1024 / 1024,
+		UsedPercent: v.UsedPercent / 1024 / 1024,
+		SwapTotal:   v.SwapTotal / 1024 / 1024,
+		SwapFree:    v.SwapFree / 1024 / 1024,
+		SwapCached:  v.SwapCached / 1024 / 1024,
 	}
 
 	return mem
