@@ -1,0 +1,171 @@
+{{template "header" .}} 
+{{template "navbar"}}
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card gauge-card" style="min-height:400px;background: #f6f8fa;">
+                    <div class="card-body gauge-card-body">
+                        <h5 class="card-title gauge-card-title mb-3">树莓派信息</h5>
+                        <ul class="list-unstyled host-info">
+                            <li class="text-white text-center p-1" style="background-color: #f05454;"><small class="host-info-title">版本</small> <span class="host-info-content">Raspberrypi 3B plus</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #30475e;"><small>主机名</small> <span class="host-info-content">Raspberrypi</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #fd8c04;"><small>IP地址</small> <span class="host-info-content">192.168.1.123</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #16697a;"><small>OS</small> <span class="host-info-content">Linux</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card gauge-card" style="min-width: 360px;">
+                            <div class="card-body gauge-card-body" >
+                                <h5 class="card-title gauge-card-title" >CPU占用</h5>
+                                <div id="cpu" style="min-height:360px;"></div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters text-center text-white">
+                            <div class="col-4">
+                                <div class="block-style" style="background-color: #f05454;">
+                                    <span>4</span>
+                                    <small style="display: block;">核心数</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="block-style" style="background-color: #30475e;">
+                                    <span>36C°</span>
+                                    <small style="display: block;">温度</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="block-style" style="background-color: #fd8c04;">
+                                    <span>600MHz</span>
+                                    <small style="display: block;">频率</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters mt-2 p-2 block-style text-center" style="background-color: #f6f8fa;">
+                            <div class="col">
+                            <span>10%</span>
+                            <small style="display: block;">IDLE</small>
+                            </div>
+                            <div class="col">
+                            <span>20%</span>
+                            <small style="display: block;">USER</small>
+                            </div>
+                            <div class="col">
+                            <span>30%</span>
+                            <small style="display: block;">SYS</small>
+                            </div>
+                            <div class="col">
+                            <span>40%</span>
+                            <small style="display: block;">NICE</small>
+                            </div>
+                            <div class="col">
+                            <span>50%</span>
+                            <small style="display: block;">IOW</small>
+                            </div>
+                            <div class="col">
+                            <span>60%</span>
+                            <small style="display: block;">IRQ</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card gauge-card" style="min-width: 360px;">
+                            <div class="card-body gauge-card-body" >
+                                <h5 class="card-title gauge-card-title" >内存占用</h5>
+                                <div id="mem" style="min-height:360px;"></div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters text-center text-white">
+                            <div class="col-4">
+                                <div class="block-style" style="background-color: #f05454;">
+                                    <span>924MB</span>
+                                    <small style="display: block;">TOTAL</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="block-style" style="background-color: #30475e;">
+                                    <span>110MB</span>
+                                    <small style="display: block;">USED</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="block-style" style="background-color: #fd8c04;">
+                                    <span>117MB</span>
+                                    <small style="display: block;">FREE</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row no-gutters mt-2 p-2 block-style text-center" style="background-color: #f6f8fa;">
+                            <div class="col">
+                            <span>9MB</span>
+                            <small style="display: block;">SHARED</small>
+                            </div>
+                            <div class="col">
+                            <span>696MB</span>
+                            <small style="display: block;">CACHE</small>
+                            </div>
+                            <div class="col">
+                            <span>742MB</span>
+                            <small style="display: block;">AVAILABLE</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mt-5 p-2 text-center text-white">
+                            <div id="disk" style="min-height:360px;"></div>
+                            <div class="row no-gutters block-style" style="background-color: #f05454;">
+                                <div class="col">
+                                <span>40%</span>
+                                <small style="display: block;">使用率</small>
+                                </div>
+                                <div class="col">
+                                <span>6GB</span>
+                                <small style="display: block;">已使用</small>
+                                </div>
+                                <div class="col">
+                                <span>10GB</span>
+                                <small style="display: block;">剩余</small>
+                                </div>
+                                <div class="col">
+                                <span>16GB</span>
+                                <small style="display: block;">总共</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mt-5 p-2 text-center text-white">
+                            <div id="swap" style="min-height:360px;"></div>
+                            <div class="row no-gutters block-style" style="background-color: #30475e;">
+                                <div class="col">
+                                <span>80%</span>
+                                <small style="display: block;">使用率</small>
+                                </div>
+                                <div class="col">
+                                <span>77MB</span>
+                                <small style="display: block;">已使用</small>
+                                </div>
+                                <div class="col">
+                                <span>22MB</span>
+                                <small style="display: block;">剩余</small>
+                                </div>
+                                <div class="col">
+                                <span>99MB</span>
+                                <small style="display: block;">总共</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="net" style="min-height:360px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+{{template "script"}}
+{{template "footer" .}}

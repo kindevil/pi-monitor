@@ -17,7 +17,7 @@ var (
 	procGetNativeSystemInfo     = common.Modkernel32.NewProc("GetNativeSystemInfo")
 )
 
-type win32Processor struct {
+type win32_Processor struct {
 	LoadPercentage            *uint16
 	Family                    uint16
 	Manufacturer              string
@@ -41,12 +41,6 @@ type win32_SystemProcessorPerformanceInformation struct {
 	DpcTime        int64 // dpc time in 100ns (this is not a filetime).
 	InterruptTime  int64 // interrupt time in 100ns
 	InterruptCount uint32
-}
-
-// Win32_PerfFormattedData_PerfOS_System struct to have count of processes and processor queue length
-type Win32_PerfFormattedData_PerfOS_System struct {
-	Processes            uint32
-	ProcessorQueueLength uint32
 }
 
 const (
@@ -104,7 +98,7 @@ func Info() ([]InfoStat, error) {
 
 func InfoWithContext(ctx context.Context) ([]InfoStat, error) {
 	var ret []InfoStat
-	var dst []win32Processor
+	var dst []win32_Processor
 	q := wmi.CreateQuery(&dst, "")
 	if err := common.WMIQueryWithContext(ctx, q, &dst); err != nil {
 		return ret, err
@@ -131,22 +125,6 @@ func InfoWithContext(ctx context.Context) ([]InfoStat, error) {
 	}
 
 	return ret, nil
-}
-
-// ProcInfo returns processes count and processor queue length in the system.
-// There is a single queue for processor even on multiprocessors systems.
-func ProcInfo() ([]Win32_PerfFormattedData_PerfOS_System, error) {
-	return ProcInfoWithContext(context.Background())
-}
-
-func ProcInfoWithContext(ctx context.Context) ([]Win32_PerfFormattedData_PerfOS_System, error) {
-	var ret []Win32_PerfFormattedData_PerfOS_System
-	q := wmi.CreateQuery(&ret, "")
-	err := common.WMIQueryWithContext(ctx, q, &ret)
-	if err != nil {
-		return []Win32_PerfFormattedData_PerfOS_System{}, err
-	}
-	return ret, err
 }
 
 // perCPUTimes returns times stat per cpu, per core and overall for all CPUs
@@ -242,7 +220,7 @@ func CountsWithContext(ctx context.Context, logical bool) (int, error) {
 	}
 	// physical cores https://github.com/giampaolo/psutil/blob/d01a9eaa35a8aadf6c519839e987a49d8be2d891/psutil/_psutil_windows.c#L499
 	// for the time being, try with unreliable and slow WMI call…
-	var dst []win32Processor
+	var dst []win32_Processor
 	q := wmi.CreateQuery(&dst, "")
 	if err := common.WMIQueryWithContext(ctx, q, &dst); err != nil {
 		return 0, err
