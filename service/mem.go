@@ -1,6 +1,6 @@
 /*
  * @Author: jia
- * @LastEditTime: 2020-12-08 14:10:38
+ * @LastEditTime: 2020-12-08 14:12:14
  * @FilePath: /pi-monitor/service/mem.go
  * @Date: 2020-12-08 13:39:02
  * @Software: VS Code
@@ -38,7 +38,7 @@ func GetMem() *Memory {
 		Shared:      v.Shared / 1024 / 1024,
 		Buffer:      v.Buffers / 1024 / 1024,
 		Available:   v.Available / 1024 / 1024,
-		UsedPercent: v.UsedPercent / 1024 / 1024,
+		UsedPercent: v.UsedPercent,
 		SwapTotal:   v.SwapTotal / 1024 / 1024,
 		SwapFree:    v.SwapFree / 1024 / 1024,
 		SwapCached:  v.SwapCached / 1024 / 1024,
