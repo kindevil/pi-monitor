@@ -7,6 +7,18 @@ import (
 	"strings"
 )
 
+// PathExists 检查文件或目录是否存在
+func PathExists(dir string) bool {
+	_, err := os.Stat(dir)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
+}
+
 func floatToString(num float64) string {
 	return strconv.FormatFloat(num, 'f', 2, 64)
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"bufio"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -12,16 +13,14 @@ import (
 )
 
 type Host struct {
-	Hostname string
-	Uptime   *UpTime
-	BootTime string
-	OS       string
-	Platform string
-	Kernal   string
-	Version  string
-	Hardware string
-	Serial   string
-	Model    string
+	Hostname     string // 主机名
+	OS           string // 系统版本
+	Vendor       string // 厂家
+	Model        string // 硬件版本
+	Serial       string // 序列号
+	BootTime     string // 启动时间
+	Kernal       string // 内核信息
+	InterfaceNum int    // 网卡数
 }
 
 type UpTime struct {
@@ -31,47 +30,170 @@ type UpTime struct {
 	Year   uint64
 }
 
-func readKernal() string {
+var hostInfo *Host
+
+//hostname 获取主机名
+func hostname() {
+	var name string
+	name, err := os.Hostname()
+	if err != nil {
+		logger.Error(err)
+	}
+	hostInfo.Hostname = name
+}
+
+//osVersion 获取操作系统版本
+func osVersion() {
+	hostInfo.OS = readOSRelease("PRETTY_NAME")
+}
+
+//getHostInfo 获取主机版本与厂家信息
+func hostVendor() {
+	model := readLine("/proc/device-tree/model")
+	switch {
+	case strings.Contains(model, "Raspberry"):
+		hostInfo.Model = model
+		hostInfo.Vendor = "Raspberry Pi"
+	case strings.Contains(model, "Radxa"):
+		hostInfo.Model = model
+		hostInfo.Vendor = "Rock Pi"
+	case strings.Contains(model, "FriendlyARM"):
+		hostInfo.Model = model
+		hostInfo.Vendor = "Nano Pi"
+	default:
+		hostInfo.Model = "unknown"
+		hostInfo.Vendor = "unknown"
+	}
+}
+
+//getSerial 获取序列号
+func serial() {
+	if PathExists("/proc/device-tree/serial-number") {
+		hostInfo.Serial = readLine("/proc/device-tree/serial-number")
+	} else if PathExists("/proc/cpuinfo") {
+		hostInfo.Serial = scanCpuInfo("Serial")
+	} else {
+		hostInfo.Serial = "unknown"
+	}
+}
+
+//bootTime 启动时间
+func bootTime(t uint64) {
+	hostInfo.BootTime = time.Unix(int64(t), 0).Format("2006-01-02 15:04:05")
+}
+
+//kernel 读取内核信息
+func kernel() {
 	cmd := exec.Command("uname", "-a")
 	stdout, err := cmd.Output()
 	if err != nil {
 		logger.Info(err)
-		return ""
 	}
-	return strings.Trim(string(stdout), "\n")
+	hostInfo.Kernal = strings.Trim(string(stdout), "\n")
+}
+
+//readLine 读取文件第一行
+func readLine(path string) string {
+	file, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	var lineText string
+	scanner := bufio.NewScanner(file)
+	scanner.Scan()
+	lineText = scanner.Text()
+	return lineText[:len(lineText)-1]
+}
+
+//readOSRelease 读取/etc/os-release
+func readOSRelease(keyward string) string {
+	file, err := os.Open("/etc/os-release")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	var lineText string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lineText = scanner.Text()
+		if strings.Contains(lineText, keyward) {
+			lineText = strings.Trim(strings.Split(lineText, "=")[1], "\"")
+			break
+		}
+	}
+
+	return lineText
+}
+
+func scanCpuInfo(keyward string) string {
+	file, err := os.Open("/proc/cpuinfo")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	var lineText string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lineText = scanner.Text()
+		if strings.Contains(lineText, keyward) {
+			lineText = strings.Trim(strings.Split(lineText, ":")[1], " ")
+			break
+		}
+	}
+
+	return lineText
+}
+
+func getInfo(path string) string {
+
+	file, err := os.Open(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	var lineText string
+	scanner := bufio.NewScanner(file)
+	scanner.Scan()
+	lineText = scanner.Text()
+
+	return lineText[:len(lineText)-1]
 }
 
 func readInfo() map[string]string {
 	var info = make(map[string]string)
 	info["hardware"] = ""
-	info["serial"] = ""
-	info["model"] = ""
+	info["serial"] = getInfo("/proc/device-tree/serial-number")
+	info["model"] = getInfo("/proc/device-tree/model")
 
-	f, err := os.Open("/proc/cpuinfo")
-	if err != nil {
-		logger.Info(err)
-	}
-	defer f.Close()
+	// f, err := os.Open("/proc/cpuinfo")
+	// if err != nil {
+	// 	logger.Info(err)
+	// }
+	// defer f.Close()
 
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "Hardware") {
-			info["hardware"] = strings.Trim(strings.Split(line, ":")[1], " ")
-		}
+	// scanner := bufio.NewScanner(f)
+	// for scanner.Scan() {
+	// 	line := scanner.Text()
+	// 	if strings.Contains(line, "Hardware") {
+	// 		info["hardware"] = strings.Trim(strings.Split(line, ":")[1], " ")
+	// 	}
 
-		if strings.Contains(line, "Serial") {
-			info["serial"] = strings.Trim(strings.Split(line, ":")[1], " ")
-		}
+	// 	if strings.Contains(line, "Serial") {
+	// 		info["serial"] = strings.Trim(strings.Split(line, ":")[1], " ")
+	// 	}
 
-		if strings.Contains(line, "Model") {
-			info["model"] = strings.Trim(strings.Split(line, ":")[1], " ")
-		}
-	}
+	// 	if strings.Contains(line, "Model") {
+	// 		info["model"] = strings.Trim(strings.Split(line, ":")[1], " ")
+	// 	}
+	// }
 
-	if scanner.Err() != nil {
-		logger.Error(scanner.Err())
-	}
+	// if scanner.Err() != nil {
+	// 	logger.Error(scanner.Err())
+	// }
 
 	return info
 }
@@ -94,24 +216,23 @@ func runningTime(t uint64) *UpTime {
 	return upTime
 }
 
-func GetHost() *Host {
+func getHost() {
 	info, err := host.Info()
 	if err != nil {
 		logger.Error(err)
 	}
 
-	boardInfo := readInfo()
+	hostInfo = &Host{}
 
-	host := &Host{
-		Hostname: info.Hostname,
-		OS:       info.OS,
-		Platform: info.Platform,
-		Hardware: boardInfo["hardware"],
-		Serial:   boardInfo["serial"],
-		Model:    boardInfo["model"],
-		Uptime:   runningTime(info.Uptime),
-		BootTime: time.Unix(int64(info.BootTime), 0).Format("2006-01-02 15:04:05"),
-		Kernal:   readKernal(),
-	}
-	return host
+	osVersion()
+	hostname()
+	hostVendor()
+	serial()
+	bootTime(info.BootTime)
+	kernel()
+	hostInfo.InterfaceNum = len(GetNet().Interface)
+}
+
+func GetHost() *Host {
+	return hostInfo
 }

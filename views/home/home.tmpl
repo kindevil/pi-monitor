@@ -5,12 +5,36 @@
             <div class="col-sm-3">
                 <div class="card gauge-card" style="min-height:400px;background: #f6f8fa;">
                     <div class="card-body gauge-card-body">
-                        <h5 class="card-title gauge-card-title mb-3">树莓派信息</h5>
+                        <h5 class="card-title gauge-card-title mb-3">{{.vendor}}</h5>
                         <ul class="list-unstyled host-info">
-                            <li class="text-white text-center p-1" style="background-color: #f05454;"><small class="host-info-title">版本</small> <span class="host-info-content">{{.version}}</span></li>
-                            <li class="text-white text-center p-1" style="background-color: #30475e;"><small>主机名</small> <span class="host-info-content">{{.hostname}}</span></li>
-                            <li class="text-white text-center p-1" style="background-color: #fd8c04;"><small>序列号</small> <span class="host-info-content">{{.serial}}</span></li>
-                            <li class="text-white text-center p-1" style="background-color: #16697a;"><small>OS</small> <span class="host-info-content">{{.os}}</span></li>
+                            <li class="text-white text-center p-1" style="background-color: #f05454;">
+                                <small class="host-info-title">主机名</small> 
+                                <span class="host-info-content">{{.hostname}}</span>
+                            </li>
+                            <li class="text-white text-center p-1" style="background-color: #30475e;">
+                                <small>系统版本</small> 
+                                <span class="host-info-content">{{.os}}</span>
+                            </li>
+                            <li class="text-white text-center p-1" style="background-color: #fd8c04;">
+                                <small>厂家</small> 
+                                <span class="host-info-content">{{.vendor}}</span>
+                            </li>
+                            <li class="text-white text-center p-1" style="background-color: #fd8c04;">
+                                <small>硬件版本</small> 
+                                <span class="host-info-content">{{.model}}</span>
+                            </li>
+                            <li class="text-white text-center p-1" style="background-color: #16697a;">
+                                <small>序列号</small> 
+                                <span class="host-info-content">{{.serial}}</span>
+                            </li>
+                            <li class="text-white text-center p-1" style="background-color: #f05454;">
+                                <small>开机时间</small> 
+                                <span class="host-info-content">{{.boottime}}</span>
+                            </li>
+                            <li class="text-white text-center p-1" style="background-color: #30475e;">
+                                <small>内核信息</small> 
+                                <span class="host-info-content">{{.kernal}}</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -27,46 +51,46 @@
                         <div class="row no-gutters text-center text-white">
                             <div class="col-4">
                                 <div class="block-style" style="background-color: #f05454;">
-                                    <span>4</span>
+                                    <span id="core">4</span>
                                     <small style="display: block;">核心数</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="block-style" style="background-color: #30475e;">
-                                    <span>36C°</span>
+                                    <span id="temp">36C°</span>
                                     <small style="display: block;">温度</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="block-style" style="background-color: #fd8c04;">
-                                    <span>600MHz</span>
+                                    <span id="freq">600MHz</span>
                                     <small style="display: block;">频率</small>
                                 </div>
                             </div>
                         </div>
                         <div class="row no-gutters mt-2 p-2 block-style text-center" style="background-color: #f6f8fa;">
                             <div class="col">
-                            <span>10%</span>
+                            <span id="idle">10%</span>
                             <small style="display: block;">IDLE</small>
                             </div>
                             <div class="col">
-                            <span>20%</span>
+                            <span id="user">20%</span>
                             <small style="display: block;">USER</small>
                             </div>
                             <div class="col">
-                            <span>30%</span>
+                            <span id="sys">30%</span>
                             <small style="display: block;">SYS</small>
                             </div>
                             <div class="col">
-                            <span>40%</span>
+                            <span id="nice">40%</span>
                             <small style="display: block;">NICE</small>
                             </div>
                             <div class="col">
-                            <span>50%</span>
+                            <span id="iow">50%</span>
                             <small style="display: block;">IOW</small>
                             </div>
                             <div class="col">
-                            <span>60%</span>
+                            <span id="irq">60%</span>
                             <small style="display: block;">IRQ</small>
                             </div>
                         </div>
@@ -81,34 +105,34 @@
                         <div class="row no-gutters text-center text-white">
                             <div class="col-4">
                                 <div class="block-style" style="background-color: #f05454;">
-                                    <span>924MB</span>
+                                    <span id="mem-total">924MB</span>
                                     <small style="display: block;">TOTAL</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="block-style" style="background-color: #30475e;">
-                                    <span>110MB</span>
+                                    <span id="mem-used">110MB</span>
                                     <small style="display: block;">USED</small>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="block-style" style="background-color: #fd8c04;">
-                                    <span>117MB</span>
+                                    <span id="mem-free">117MB</span>
                                     <small style="display: block;">FREE</small>
                                 </div>
                             </div>
                         </div>
                         <div class="row no-gutters mt-2 p-2 block-style text-center" style="background-color: #f6f8fa;">
                             <div class="col">
-                            <span>9MB</span>
+                            <span id="mem-shared">9MB</span>
                             <small style="display: block;">SHARED</small>
                             </div>
                             <div class="col">
-                            <span>696MB</span>
+                            <span id="mem-cache">696MB</span>
                             <small style="display: block;">CACHE</small>
                             </div>
                             <div class="col">
-                            <span>742MB</span>
+                            <span id="mem-ava">742MB</span>
                             <small style="display: block;">AVAILABLE</small>
                             </div>
                         </div>
@@ -160,7 +184,9 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <div id="net" style="min-height:360px;"></div>
+                        <div id="net-traffic-1" style="min-height:360px;"></div>
+                        <div id="net-traffic-2" style="min-height:360px;"></div>
+                        <div id="net-traffic-3" style="min-height:360px;"></div>
                     </div>
                 </div>
             </div>
@@ -168,4 +194,10 @@
         
     </div>
 {{template "script"}}
+    <script>
+        var net_count = {{.netCount}}
+    </script>
+    <script src="static/js/echarts.min.js"></script>
+    <script src="static/js/axios.min.js"></script>
+    <script src="static/js/app.js"></script>
 {{template "footer" .}}

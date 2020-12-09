@@ -17,7 +17,7 @@ type Memory struct {
 	Used        uint64
 	Free        uint64
 	Shared      uint64
-	Buffer      uint64
+	Cached      uint64
 	Available   uint64
 	UsedPercent float64
 	SwapTotal   uint64
@@ -36,7 +36,7 @@ func GetMem() *Memory {
 		Used:        v.Used / 1024 / 1024,
 		Free:        v.Free / 1024 / 1024,
 		Shared:      v.Shared / 1024 / 1024,
-		Buffer:      v.Buffers / 1024 / 1024,
+		Cached:      v.Cached / 1024 / 1024,
 		Available:   v.Available / 1024 / 1024,
 		UsedPercent: v.UsedPercent,
 		SwapTotal:   v.SwapTotal / 1024 / 1024,

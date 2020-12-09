@@ -7,9 +7,12 @@
  */
 package main
 
-import "pi-monitor/route"
+import (
+	"pi-monitor/route"
+)
 
 func main() {
-	//service.GetMem()
+	//service.InitNetStat()
+	//service.GetNet()
 	route.Run()
 }
