@@ -136,7 +136,7 @@ for (i=0;i<net_count;i++) {
 
     net_traffic_option.push({
         title: {
-            text: '24小时流量监控图',
+            text: '',
         },
         legend: {
             icon:'rect',//标记图标，方形
@@ -275,6 +275,7 @@ setInterval(function () {
                     net_traffic_option[key].series[1].data.shift()
                 }
 
+                net_traffic_option[key].title.text = "网卡" + val.Name + "流量"
                 net_traffic_option[key].series[0].data.push(in_data)
                 net_traffic_option[key].series[1].data.push(out_data)
             });
