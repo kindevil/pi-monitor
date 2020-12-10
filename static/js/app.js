@@ -308,7 +308,7 @@ setInterval(function () {
                 $('#traffic-total-in-'+(key+1)).text(bytesRound(val.BytesRecv, 2));
                 $('#traffic-total-out-'+(key+1)).text(bytesRound(val.BytesSent, 2));
                 $('#traffic-cur-in-'+(key+1)).text(bytesRound(val.Recv * 1024, 2)+"/s");
-                $('#traffic-cur-out-'+(key+1)).text(bytesRound(val.Recv * 1024, 2)+"/s");
+                $('#traffic-cur-out-'+(key+1)).text(bytesRound(val.Send * 1024, 2)+"/s");
                 net_traffic_option[key].series[0].data.push(in_data)
                 net_traffic_option[key].series[1].data.push(out_data)
             });
