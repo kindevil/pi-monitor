@@ -27,5 +27,6 @@ func Collect(c *gin.Context) {
 		"CPU":    service.GetCPU(),
 		"Memory": service.GetMem(),
 		"Net":    service.GetNet(),
+		"disk":   service.GetDisk(),
 	})
 }

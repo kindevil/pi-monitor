@@ -63,6 +63,10 @@ func GetNet() *Net {
 	timeNow := time.Now()
 
 	for _, val := range list {
+		if val.Name == "lo" {
+			continue
+		}
+
 		s := search(val.Name, stat)
 		var recv, send, diff float64 = 0, 0, 0
 		if len(netLastStat) != 0 {

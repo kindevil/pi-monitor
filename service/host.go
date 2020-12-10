@@ -13,14 +13,15 @@ import (
 )
 
 type Host struct {
-	Hostname     string // 主机名
-	OS           string // 系统版本
-	Vendor       string // 厂家
-	Model        string // 硬件版本
-	Serial       string // 序列号
-	BootTime     string // 启动时间
-	Kernal       string // 内核信息
-	InterfaceNum int    // 网卡数
+	Hostname     string    // 主机名
+	OS           string    // 系统版本
+	Vendor       string    // 厂家
+	Model        string    // 硬件版本
+	Serial       string    // 序列号
+	BootTime     string    // 启动时间
+	Kernal       string    // 内核信息
+	InterfaceNum int       // 网卡数
+	Disks        []*device // 存储设备
 }
 
 type UpTime struct {
@@ -28,6 +29,11 @@ type UpTime struct {
 	Hour   uint64
 	Day    uint64
 	Year   uint64
+}
+
+type netInter struct {
+	Count int
+	Names []string
 }
 
 var hostInfo *Host
@@ -90,6 +96,19 @@ func kernel() {
 		logger.Info(err)
 	}
 	hostInfo.Kernal = strings.Trim(string(stdout), "\n")
+}
+
+func netInterface() {
+	n := GetNet().Interface
+	nt := &netInter{}
+	nt.Count = len(n)
+	for _, val := range n {
+		nt.Names = append(nt.Names, val.Name)
+	}
+}
+
+func diskDevice() {
+	hostInfo.Disks = GetDisk()
 }
 
 //readLine 读取文件第一行
@@ -231,6 +250,7 @@ func getHost() {
 	bootTime(info.BootTime)
 	kernel()
 	hostInfo.InterfaceNum = len(GetNet().Interface)
+	diskDevice()
 }
 
 func GetHost() *Host {

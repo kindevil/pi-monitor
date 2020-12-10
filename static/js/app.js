@@ -13,7 +13,7 @@ cpuUsageOption = {
             name: 'CPU占用率',
             type: 'gauge',
             detail: {formatter: '{value}%'},
-            data: [{value: 50, name: 'CPU占用率'}]
+            data: [{value: 0, name: 'CPU占用率'}]
         }
     ]
 };
@@ -27,7 +27,7 @@ memUsageOption = {
             name: '内存占用率',
             type: 'gauge',
             detail: {formatter: '{value}%'},
-            data: [{value: 50, name: '内存占用率'}]
+            data: [{value: 0, name: '内存占用率'}]
         }
     ]
 };
@@ -132,14 +132,19 @@ var net_traffic = new Array();
 var net_traffic_option = new Array();
 
 for (i=0;i<net_count;i++) {
+    console.log(net_count)
     net_traffic.push(echarts.init(document.getElementById('net-traffic-'+(i+1))));
 
     net_traffic_option.push({
         title: {
             text: '',
         },
+        color: ["#f05454", "#006699"],
         legend: {
-            icon:'rect',//标记图标，方形
+            icon:'roundRect',//标记图标，方形
+            textStyle: {
+
+            }
         },
         tooltip: { 
             trigger: 'axis',
@@ -165,10 +170,10 @@ for (i=0;i<net_count;i++) {
                 fontSize:14,
             },
             type: 'time',
-            maxInterval: 3600*2*1000,
+            maxInterval: 3600*1*1000,
             splitLine: { 
                 show: false
-            },
+            }
         },
         yAxis: {
             name:'流量',
@@ -199,9 +204,9 @@ for (i=0;i<net_count;i++) {
             // lineStyle:{
             //     opacity:0,
             // },
-            itemStyle:{
-                color:'rgb(0,204,0)',
-            },
+            // itemStyle:{
+            //     color:'rgb(0,204,0)',
+            // },
             
         },
         {
@@ -210,10 +215,10 @@ for (i=0;i<net_count;i++) {
             showSymbol: false,
             hoverAnimation: false,
             data: new Array(),
-            itemStyle:{
-                opacity:0.7,
-                color:'rgb(0,0,225)',
-            }
+            // itemStyle:{
+            //     opacity:0.7,
+            //     color:'rgb(0,0,225)',
+            // }
         }]
     });
 }
@@ -233,6 +238,26 @@ Date.prototype.Format = function (fmt) {
     for (var k in o)  
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));  
     return fmt;  
+}
+
+function bytesRound(number, round)
+{
+    if (number<0){
+        var last=0+"B";
+    }else if (number<1024){
+        //var last=Math.round(number*Math.pow(10,round))/Math.pow(10,round)+"B";
+        var last=number+"B";
+    }else if (number<1048576){
+        number=number/1024;
+        var last=Math.round(number*Math.pow(10,round))/Math.pow(10,round)+"K";
+    }else if (number<1048576000){
+        number=number/1048576;
+        var last=Math.round(number*Math.pow(10,round))/Math.pow(10,round)+"M";
+    }else{
+        number=number/1048576000;
+        var last=Math.round(number*Math.pow(10,round))/Math.pow(10,round)+"G";
+    }
+    return last;
 }
 
 setInterval(function () {
@@ -261,7 +286,11 @@ setInterval(function () {
             $("#mem-shared").text(response.data.Memory.Shared+"MB");
             $("#mem-cache").text(response.data.Memory.Cached+"MB");
             $("#mem-ava").text(response.data.Memory.Available+"MB");
-            
+            $("#swap-usage").text(((response.data.Memory.SwapTotal - response.data.Memory.SwapFree)/response.data.Memory.SwapTotal).toFixed(2)+"%")
+            $("#swap-used").text(response.data.Memory.SwapTotal - response.data.Memory.SwapFree+"MB")
+            $("#swap-remain").text(response.data.Memory.SwapFree+"MB")
+            $("#swap-total").text(response.data.Memory.SwapTotal+"MB")
+
             $.each(response.data.Net.Interface,function(key,val){
                 var in_data = [];
                 var out_data = [];
@@ -275,7 +304,11 @@ setInterval(function () {
                     net_traffic_option[key].series[1].data.shift()
                 }
 
-                net_traffic_option[key].title.text = "网卡" + val.Name + "流量"
+                net_traffic_option[key].title.text = "网卡 " + val.Name + " 流量"
+                $('#traffic-total-in-'+(key+1)).text(bytesRound(val.BytesRecv, 2));
+                $('#traffic-total-out-'+(key+1)).text(bytesRound(val.BytesSent, 2));
+                $('#traffic-cur-in-'+(key+1)).text(bytesRound(val.Recv * 1024, 2)+"/s");
+                $('#traffic-cur-out-'+(key+1)).text(bytesRound(val.Recv * 1024, 2)+"/s");
                 net_traffic_option[key].series[0].data.push(in_data)
                 net_traffic_option[key].series[1].data.push(out_data)
             });
@@ -307,26 +340,9 @@ setInterval(function () {
     memUsage.setOption(diskOption, true)
     swapUsage.setOption(swapOption, true)
 
-    //net_traffic.setOption(net_traffic_option, true);
-
     $.each(net_traffic,function(key,val){
         val.setOption(net_traffic_option[key], true);
-    });
-
-    // $.each(net_traffic,function(key,val){
-
-    //     for (var i = 0; i < 5; i++) {        
-    //         traffic_in.shift();
-    //         traffic_in.push(randomData());
-    //         traffic_out.shift();
-    //         traffic_out.push(randomData());
-    //     }
-
-    //     net_traffic_option[key].series[0].data = traffic_in
-    //     net_traffic_option[key].series[1].data = traffic_out
-    //     val.setOption(net_traffic_option[key], true);
-    // });
-    
+    });    
 },1000);
 
 });
