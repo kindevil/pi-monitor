@@ -95,7 +95,6 @@ func interfaceStat() map[string]*Interface {
 }
 
 func loadInterfaceStatList() net.InterfaceStatList {
-	net.Interfaces()
 	interfaceList, err := net.Interfaces()
 	if err != nil {
 		log.Error(err)

@@ -14,5 +14,6 @@ import (
 
 func TestGetNetNames(t *testing.T) {
 	lastInterface = interfaceStat()
+	fmt.Println(lastInterface)
 	fmt.Println(GetNetNames())
 }
