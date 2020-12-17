@@ -2,6 +2,7 @@ package service
 
 import (
 	"bufio"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -115,7 +116,8 @@ func diskDevice() {
 func readLine(path string) string {
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
+		return ""
 	}
 	defer file.Close()
 
@@ -130,7 +132,7 @@ func readLine(path string) string {
 func readOSRelease(keyward string) string {
 	file, err := os.Open("/etc/os-release")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer file.Close()
 

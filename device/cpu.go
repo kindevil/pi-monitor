@@ -10,17 +10,19 @@ package device
 import (
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
+	log "github.com/sirupsen/logrus"
 	"github.com/wonderivan/logger"
 	"pi-monitor/helper"
 	"strconv"
 )
 
 type CPU struct {
-	Cores   int
-	Threads int
-	Freq    *Freq
-	Load    *CPULoad
-	Temp    float64
+	InfoStat cpu.InfoStat
+	Cores    int
+	Threads  int
+	Freq     *Freq
+	Load     *CPULoad
+	Temp     float64
 }
 
 type CPULoad struct {
@@ -48,13 +50,22 @@ func init() {
 
 func GetCpu() *CPU {
 	cpu := &CPU{
-		Cores:   GetCounts(false),
-		Threads: GetCounts(false),
-		Freq:    GetFreqs(),
-		Load:    cpuLoad(),
-		Temp:    GetTemperature(),
+		InfoStat: GetInfoStat(),
+		Cores:    GetCounts(false),
+		Threads:  GetCounts(false),
+		Freq:     GetFreqs(),
+		Load:     cpuLoad(),
+		Temp:     GetTemperature(),
 	}
 	return cpu
+}
+
+func GetInfoStat() cpu.InfoStat {
+	infoStat, err := cpu.Info()
+	if err != nil {
+		log.Error(err)
+	}
+	return infoStat[0]
 }
 
 func getTimeStat() cpu.TimesStat {

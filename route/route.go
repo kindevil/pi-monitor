@@ -9,12 +9,12 @@ package route
 
 import (
 	"pi-monitor/api"
-	"pi-monitor/service"
+	"pi-monitor/controller"
 )
 
 func route() {
 	server.Gin.LoadHTMLGlob("views/**/*")
 	server.Gin.Static("static/", "static/")
-	server.Gin.GET("/", service.Index)
+	server.Gin.GET("/", controller.Dashboard)
 	server.Gin.GET("/api/get", api.Collect)
 }

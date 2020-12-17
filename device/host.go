@@ -9,6 +9,7 @@ package device
 
 import (
 	"bufio"
+	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
 	log "github.com/sirupsen/logrus"
 	"github.com/wonderivan/logger"
@@ -27,11 +28,14 @@ type Host struct {
 	Serial   string // 序列号
 	BootTime string // 启动时间
 	Kernal   string // 内核信息
-	Cpu      struct {
+	CPU      struct {
+		InfoStat    cpu.InfoStat
 		Core        int     // CPU核心数
 		Freq        *Freq   // CPU频率
 		Temperature float64 // CPU温度
 	}
+	Mem       *Memory
+	Disks     []*Disk
 	Interface struct {
 		Names []string // 网卡名称
 		Count int      // 网卡数
@@ -59,9 +63,12 @@ func init() {
 	hostinfo.serial()
 	hostinfo.bootTime()
 	hostinfo.kernel()
-	hostinfo.Cpu.Core = GetCounts(false)
-	hostinfo.Cpu.Freq = GetFreqs()
-	hostinfo.Cpu.Temperature = GetTemperature()
+	hostinfo.CPU.InfoStat = GetInfoStat()
+	hostinfo.CPU.Core = GetCounts(false)
+	hostinfo.CPU.Freq = GetFreqs()
+	hostinfo.CPU.Temperature = GetTemperature()
+	hostinfo.Mem = GetMemory()
+	hostinfo.Disks = GetDisk()
 	hostinfo.Interface.Count = GetNetCount()
 	hostinfo.Interface.Names = GetNetNames()
 }
@@ -162,7 +169,7 @@ func (this *Host) readOSRelease(keyward string) string {
 
 	file, err := os.Open("/etc/os-release")
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 		return ""
 	}
 	defer file.Close()
@@ -187,7 +194,7 @@ func scanCpuInfo(keyward string) string {
 
 	file, err := os.Open("/proc/cpuinfo")
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 		return ""
 	}
 	defer file.Close()

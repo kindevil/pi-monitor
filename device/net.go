@@ -68,7 +68,7 @@ func GetNetNames() []string {
 	for _, v := range lastInterface {
 		names = append(names, v.Name)
 	}
-	return nil
+	return names
 }
 
 func interfaceStat() map[string]*Interface {

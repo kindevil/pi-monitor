@@ -1,0 +1,36 @@
+{{template "header" .}}
+{{template "navbar"}}
+<div class="container-fluid mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="host-info p-3">
+                <dt>主机名<dt/>
+                <dd>{{.host.Hostname}}</dd>
+                <dt>操作系统</dt>
+                <dd>{{.host.OS}}</dd>
+                <dt>启动时间</dt>
+                <dd>{{.host.BootTime}}</dd>
+                <dt>厂商</dt>
+                <dd>{{.host.Vendor}}</dd>
+                <dt>硬件版本</dt>
+                <dd>{{.host.Model}}</dd>
+                <dt>序列号</dt>
+                <dd>{{.host.Serial}}</dd>
+                <dt>内核信息</dt>
+                <dd>{{.host.Kernal}}</dd>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <div>
+                        <h5>CPU信息</h5>
+                        {{.host.CPU.InfoStat.ModelName}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{template "script"}}
+{{template "footer" .}}

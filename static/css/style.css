@@ -1,3 +1,14 @@
+.host-info {
+    background: #f6f8fa !important;
+}
+.host-info dt {
+    color: #5a6268 !important;
+    font-size: 75%;
+    font-weight: normal;
+}
+.host-info dd {
+    color: #f05454;
+}
 .gauge-card {
     border: none;
     border-radius: 0.5em !important;

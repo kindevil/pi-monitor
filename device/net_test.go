@@ -13,7 +13,9 @@ import (
 )
 
 func TestGetNetNames(t *testing.T) {
-	lastInterface = interfaceStat()
-	fmt.Println(lastInterface)
 	fmt.Println(GetNetNames())
+}
+
+func TestGetNetCount(t *testing.T) {
+	fmt.Println(GetNetCount())
 }

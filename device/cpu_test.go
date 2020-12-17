@@ -15,3 +15,6 @@ import (
 func TestGetCpu(t *testing.T) {
 	fmt.Println(GetCpu())
 }
+func TestGetInfoStat(t *testing.T) {
+	fmt.Println(GetInfoStat())
+}
