@@ -15,3 +15,7 @@ import (
 func TestGetHost(t *testing.T) {
 	fmt.Println(GetHost())
 }
+
+func TestGetUptime(t *testing.T) {
+	fmt.Println(GetUptime())
+}

@@ -32,11 +32,20 @@ type Host struct {
 	infostat       *host.InfoStat
 }
 
-var hostinfo *Host
+type UPtime struct {
+	Minute uint64
+	Hour   uint64
+	Day    uint64
+	Year   uint64
+}
+
+var (
+	hostinfo *Host
+)
 
 func init() {
 	hostinfo = new(Host)
-	hostinfo.getInfostat()
+	hostinfo.infostat = getInfostat()
 	hostinfo.hostname()
 	hostinfo.osVersion()
 	hostinfo.hostVendor()
@@ -51,12 +60,32 @@ func GetHost() *Host {
 	return hostinfo
 }
 
-func (this *Host) getInfostat() {
+func GetUptime() *UPtime {
+	t := getInfostat().Uptime
+
+	var mins = (t - (t % 60)) / 60
+	var min = mins % 60
+	var hours = (mins - min) / 60
+	var hour = hours % 24
+	var day = hours / 24
+	var year = hours / 24 / 365
+
+	upTime := &UPtime{
+		Minute: min,
+		Hour:   hour,
+		Day:    day,
+		Year:   year,
+	}
+
+	return upTime
+}
+
+func getInfostat() *host.InfoStat {
 	stat, err := host.Info()
 	if err != nil {
 		log.Error(err)
 	}
-	this.infostat = stat
+	return stat
 }
 
 func (this *Host) hostname() {
