@@ -20,16 +20,23 @@ import (
 )
 
 type Host struct {
-	Hostname       string   // 主机名
-	OS             string   // 系统版本
-	Vendor         string   // 厂家
-	Model          string   // 硬件版本
-	Serial         string   // 序列号
-	BootTime       string   // 启动时间
-	Kernal         string   // 内核信息
-	InterfaceNum   int      // 网卡数
-	InterfaceNames []string // 网卡名称
-	infostat       *host.InfoStat
+	Hostname string // 主机名
+	OS       string // 系统版本
+	Vendor   string // 厂家
+	Model    string // 硬件版本
+	Serial   string // 序列号
+	BootTime string // 启动时间
+	Kernal   string // 内核信息
+	Cpu      struct {
+		Core        int     // CPU核心数
+		Freq        *Freq   // CPU频率
+		Temperature float64 // CPU温度
+	}
+	Interface struct {
+		Names []string // 网卡名称
+		Count int      // 网卡数
+	}
+	infostat *host.InfoStat
 }
 
 type UPtime struct {
@@ -52,8 +59,11 @@ func init() {
 	hostinfo.serial()
 	hostinfo.bootTime()
 	hostinfo.kernel()
-	hostinfo.InterfaceNum = GetNetCount()
-	hostinfo.InterfaceNames = GetNetNames()
+	hostinfo.Cpu.Core = GetCounts(false)
+	hostinfo.Cpu.Freq = GetFreqs()
+	hostinfo.Cpu.Temperature = GetTemperature()
+	hostinfo.Interface.Count = GetNetCount()
+	hostinfo.Interface.Names = GetNetNames()
 }
 
 func GetHost() *Host {
