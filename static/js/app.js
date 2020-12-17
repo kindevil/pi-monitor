@@ -146,7 +146,7 @@ for (i=0;i<net_count;i++) {
 
             }
         },
-        tooltip: { 
+        tooltip: {
             trigger: 'axis',
             formatter: function (params) {
                 var tmpparams = params[1];

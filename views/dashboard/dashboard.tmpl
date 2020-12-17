@@ -3,19 +3,31 @@
 <div class="container-fluid mt-5 mb-5">
     <div class="row">
         <div class="col-md-3">
-            <div class="host-info p-3">
+            <div class="host-info">
                 <dt>主机名<dt/>
                 <dd>{{.host.Hostname}}</dd>
+            </div>
+            <div class="host-info">
                 <dt>操作系统</dt>
                 <dd>{{.host.OS}}</dd>
+            </div>
+            <div class="host-info">
                 <dt>启动时间</dt>
                 <dd>{{.host.BootTime}}</dd>
+            </div>
+            <div class="host-info">
                 <dt>厂商</dt>
                 <dd>{{.host.Vendor}}</dd>
+            </div>
+            <div class="host-info">
                 <dt>硬件版本</dt>
                 <dd>{{.host.Model}}</dd>
+            </div>
+            <div class="host-info">
                 <dt>序列号</dt>
                 <dd>{{.host.Serial}}</dd>
+            </div>
+            <div class="host-info">
                 <dt>内核信息</dt>
                 <dd>{{.host.Kernal}}</dd>
             </div>
@@ -23,14 +35,101 @@
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-6">
-                    <div>
-                        <h5>CPU信息</h5>
-                        {{.host.CPU.InfoStat.ModelName}}
+                    <div id="cpu-usage" class="gauge"></div>
+                    <div class="show-info text-white" style="background-color: #f05454">
+                        <div class="row">
+                            <div class="col">
+                                <dt>核心数</dt>
+                                <dd>{{.host.CPU.Core}}</dd>
+                            </div>
+                            <div class="col">
+                                <dt>温度</dt>
+                                <dd>{{.host.CPU.Temperature}}C°</dd>
+                            </div>
+                            <div class="col">
+                                <dt>当前频率</dt>
+                                <dd>{{.host.CPU.InfoStat.Mhz}}Mhz</dd>
+                            </div>
+                        </div>
                     </div>
+                    <div class="show-info mt-3">
+                        <div class="row">
+                            <div class="col">
+                                <dt style="display: block;">IDLE</dt>
+                                <dd id="idle">0</dd>
+                            </div>
+                            <div class="col">
+                                <dt style="display: block;">USER</dt>
+                                <dd id="user">0</dd>
+                            </div>
+                            <div class="col">
+                                <dt style="display: block;">SYS</dt>
+                                <dd id="sys">0</dd>
+                            </div>
+                            <div class="col">
+                                <dt style="display: block;">NICE</dt>
+                                <dd id="nice">0</dd>
+                            </div>
+                            <div class="col">
+                                <dt style="display: block;">IOW</dt>
+                                <dd id="iow">0</dd>
+                            </div>
+                            <div class="col">
+                                <dt style="display: block;">IRQ</dt>
+                                <dd id="irq">0</dd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="mem-usage" class="gauge"></div>
+                    <div class="show-info text-white" style="background-color: #30475e">
+                        <div class="row">
+                            <div class="col">
+                                <dt>总共</dt>
+                                <dd>{{.host.Mem.Total}}MB</dd>
+                            </div>
+                            <div class="col">
+                                <dt>已使用</dt>
+                                <dd>{{.host.Mem.Used}}MB</dd>
+                            </div>
+                            <div class="col">
+                                <dt>未使用</dt>
+                                <dd>{{.host.Mem.Free}}MB</dd>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="show-info mt-3">
+                        <div class="row">
+                            <div class="col">
+                                <dt>SHARED</dt>
+                                <dd>{{.host.Mem.Shared}}</dd>
+                            </div>
+                            <div class="col">
+                                <dt>CACHE</dt>
+                                <dd>{{.host.Mem.Cached}}</dd>
+                            </div>
+                            <div class="col">
+                                <dt>AVAILABLE</dt>
+                                <dd>{{.host.Mem.Available}}</dd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div id="swap-usage" class="pie"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 {{template "script"}}
+    <script>
+        var host = {{.host}}
+    </script>
+    <script src="static/js/echarts.min.js"></script>
+    <script src="static/js/axios.min.js"></script>
+    <script src="static/js/monitor.js"></script>
 {{template "footer" .}}

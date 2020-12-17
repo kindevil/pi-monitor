@@ -1,5 +1,11 @@
+body{
+    color: #5a6268 !important;
+}
 .host-info {
+    padding: 10px 15px;
+    margin-bottom: 5px;
     background: #f6f8fa !important;
+    border-radius: 8px;
 }
 .host-info dt {
     color: #5a6268 !important;
@@ -7,52 +13,30 @@
     font-weight: normal;
 }
 .host-info dd {
-    color: #f05454;
-}
-.gauge-card {
-    border: none;
-    border-radius: 0.5em !important;
-}
-.gauge-card-body {
-    padding: 0;
-}
-.gauge-card-body ul li {
-    margin: 8px 20px !important;
-    border-radius: 0.5em !important;
-}
-.gauge-card-title {
-    padding-left: 15px;
-    padding-top: 15px;
+    color: #30475e;
     margin-bottom: 0;
 }
-.host-info-title {
-    color: #888;
+.gauge {
+    height: 320px;
+    width: 100%;
 }
-.host-info-content {
-    display: block;
-    font-size: 14px;
-    font-weight: inherit;
-    color: #333;
-    padding: 0 10px;
-}
-#cpu {
-    display: block;
-    margin: auto;
-}
-.block-style {
-    padding: 10px;
-    margin: 0 5px;
-    border-radius: 0.5em !important;
-}
-.net-traffic {
-    background-color: #f6f8fa;
-}
-.net-traffic ul{
-    margin-bottom: 0;
-}
-.net-traffic-total {
 
+.show-info {
+    background: #f6f8fa;
+    text-align: center;
+    padding: 5px;
+    border-radius: 8px;
 }
-.disk-device {
-    background-color: #f6f8fa;
+
+.show-info dt{
+    font-weight: normal;
+    font-size: 75%;
+}
+
+.show-info dd{
+    margin-bottom: 0 ;
+}
+.pie{
+    height: 320px;
+    width: 100%;
 }
