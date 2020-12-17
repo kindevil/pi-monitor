@@ -40,8 +40,9 @@ github.com/shirou/gopsutil/v3/internal/common
 github.com/shirou/gopsutil/v3/mem
 github.com/shirou/gopsutil/v3/net
 github.com/shirou/gopsutil/v3/process
-# github.com/tidwall/gjson v1.6.3
+# github.com/sirupsen/logrus v1.7.0
 ## explicit
+github.com/sirupsen/logrus
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
 # github.com/wonderivan/logger v1.0.0
