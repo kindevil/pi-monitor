@@ -121,6 +121,37 @@
                 <div class="col-md-6">
                     <div id="swap-usage" class="pie"></div>
                 </div>
+                <div class="col-md-6">
+                    <div class="show-info">
+                        <div class="row">
+                            <div class="col">
+                                <dt>使用率</dt>
+                                <dd>{{.host.Mem.SwapTotal}}</dd>
+                            </div>
+                            <div class="col">
+                                <dt>已使用</dt>
+                                <dd>{{.host.Mem.SwapTotal}} - {{.host.Mem.SwapFree}}</dd>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="show-info mt-5">
+                        <div class="row">
+                            <div class="col">
+                                <dt>未使用</dt>
+                                <dd>{{.host.Mem.SwapFree}}</dd>
+                            </div>
+                            <div class="col">
+                                <dt>已缓存</dt>
+                                <dd>{{.host.Mem.SwapCached}}</dd>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {{range .host.Disks}}
+                    {{.Name}}
+                {{end}}
             </div>
         </div>
     </div>
