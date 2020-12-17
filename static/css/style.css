@@ -40,3 +40,9 @@ body{
     height: 320px;
     width: 100%;
 }
+.line {
+    height: 320px;
+    width: 100%;
+    padding-top: 10px;
+    background-color: #f6f8fa;
+}

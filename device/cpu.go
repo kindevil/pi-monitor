@@ -8,12 +8,13 @@
 package device
 
 import (
+	"pi-monitor/helper"
+	"strconv"
+
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
 	log "github.com/sirupsen/logrus"
 	"github.com/wonderivan/logger"
-	"pi-monitor/helper"
-	"strconv"
 )
 
 type CPU struct {
@@ -102,7 +103,7 @@ func GetTemperature() float64 {
 	if err != nil {
 		logger.Error(err)
 	}
-	return temperatures[0].Temperature
+	return helper.ToFixed(temperatures[0].Temperature)
 }
 
 func GetCounts(logical bool) int {

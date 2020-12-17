@@ -9,15 +9,17 @@ package device
 
 import (
 	"bufio"
-	"github.com/shirou/gopsutil/v3/cpu"
-	"github.com/shirou/gopsutil/v3/host"
-	log "github.com/sirupsen/logrus"
-	"github.com/wonderivan/logger"
 	"os"
 	"os/exec"
 	"pi-monitor/helper"
 	"strings"
 	"time"
+
+	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/host"
+	"github.com/shirou/gopsutil/v3/load"
+	log "github.com/sirupsen/logrus"
+	"github.com/wonderivan/logger"
 )
 
 type Host struct {
@@ -37,9 +39,10 @@ type Host struct {
 	Mem       *Memory
 	Disks     []*Disk
 	Interface struct {
-		Names []string // 网卡名称
-		Count int      // 网卡数
+		Interfaces map[string]*Interface // 网卡名称
+		Count      int                   // 网卡数
 	}
+	Load     *load.AvgStat
 	infostat *host.InfoStat
 }
 
@@ -55,6 +58,8 @@ var (
 )
 
 func init() {
+	netInit()
+
 	hostinfo = new(Host)
 	hostinfo.infostat = getInfostat()
 	hostinfo.hostname()
@@ -70,7 +75,8 @@ func init() {
 	hostinfo.Mem = GetMemory()
 	hostinfo.Disks = GetDisk()
 	hostinfo.Interface.Count = GetNetCount()
-	hostinfo.Interface.Names = GetNetNames()
+	hostinfo.Interface.Interfaces = GetInterfaceStat()
+	hostinfo.Load = GetLoad()
 }
 
 func GetHost() *Host {

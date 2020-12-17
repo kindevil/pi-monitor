@@ -1,6 +1,8 @@
 package device
 
 import (
+	"pi-monitor/helper"
+
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/wonderivan/logger"
 )
@@ -24,7 +26,6 @@ func GetDisk() []*Disk {
 	}
 
 	for _, dev := range partitions {
-
 		d := &Disk{}
 		d.Name = dev.Device
 		d.Mountpoint = dev.Mountpoint
@@ -39,7 +40,7 @@ func GetDisk() []*Disk {
 		d.Total = usage.Total / 1024 / 1024
 		d.Free = usage.Free / 1024 / 1024
 		d.Used = usage.Used / 1024 / 1024
-		d.UsedPercent = usage.UsedPercent
+		d.UsedPercent = helper.ToFixed(usage.UsedPercent)
 
 		Disks = append(Disks, d)
 	}

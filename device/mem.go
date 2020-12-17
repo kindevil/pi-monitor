@@ -8,6 +8,8 @@
 package device
 
 import (
+	"pi-monitor/helper"
+
 	"github.com/shirou/gopsutil/v3/mem"
 	log "github.com/sirupsen/logrus"
 )
@@ -38,7 +40,7 @@ func GetMemory() *Memory {
 		Shared:      v.Shared / 1024 / 1024,
 		Cached:      v.Cached / 1024 / 1024,
 		Available:   v.Available / 1024 / 1024,
-		UsedPercent: v.UsedPercent,
+		UsedPercent: helper.ToFixed(v.UsedPercent),
 		SwapTotal:   v.SwapTotal / 1024 / 1024,
 		SwapFree:    v.SwapFree / 1024 / 1024,
 		SwapCached:  v.SwapCached / 1024 / 1024,

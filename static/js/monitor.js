@@ -74,8 +74,93 @@ $(document).ready(function() {
         ]
     };
 
+    var net_traffic = new Array();
+    var net_traffic_option = new Array();
+
+    $.each(host.Interface.Interfaces, function(i,j){
+        net_traffic.push(echarts.init(document.getElementById('network-'+(j.Name))));
+    
+        net_traffic_option.push({
+            title: {
+                text: '',
+            },
+            color: ["#f05454", "#006699"],
+            legend: {
+                icon:'roundRect',//标记图标，方形
+                textStyle: {
+    
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    var tmpparams = params[1];
+                    params = params[0];
+                    if (tmpparams.value[1] > 1024 || params.value[1] > 1024 ) {
+                        return params.value[0] + '</br>'+params.seriesName+':' + (params.value[1]/1024).toFixed(2) + "Mb/s"+'</br>'+tmpparams.seriesName+':' + (tmpparams.value[1]/1024).toFixed(2) + "Mb/s";
+                    } else {
+                        return params.value[0] + '</br>'+params.seriesName+':' + params.value[1] + "kb/s"+'</br>'+tmpparams.seriesName+':' + tmpparams.value[1] + "kb/s";
+                    }
+                    return params.value[0] + '</br>'+params.seriesName+':' + params.value[1] + "kb/s";
+                },
+                axisPointer: {
+                    animation: false
+                },
+            },
+            xAxis: {
+                name:'时间',
+                nameTextStyle:{
+                    padding:[15,0,0,0],
+                    fontSize:14,
+                },
+                type: 'time',
+                maxInterval: 3600*1*1000,
+                splitLine: { 
+                    show: false
+                }
+            },
+            yAxis: {
+                name:'流量',
+                nameLocation:'center',
+                nameGap:1,
+                type: 'value',
+                min:0,
+                splitLine: {
+                    show: true
+                },
+                axisLabel: {
+                    formatter: function(value, index) {
+                        if (value > 1024) {
+                            return parseInt(value/1024)+"M";
+                        }
+                        return value+"k";
+                    },
+                }
+            },
+            series: [{
+                name: '入口网速',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(),
+                
+            },
+            {
+                name: '出口网速',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data: new Array(),
+            }]
+        });
+    })
+
 
     cpuUsage.setOption(cpuUsageOption, true);
     memUsage.setOption(memUsageOption, true);
     swapUsage.setOption(swapUsageOption, true);
+
+    $.each(net_traffic,function(key,val){
+        val.setOption(net_traffic_option[key], true);
+    });  
 })

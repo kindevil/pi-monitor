@@ -8,9 +8,11 @@
 package device
 
 import (
+	"pi-monitor/helper"
+	"time"
+
 	"github.com/shirou/gopsutil/v3/net"
 	log "github.com/sirupsen/logrus"
-	"time"
 )
 
 type Net struct {
@@ -36,12 +38,12 @@ var (
 	lastTime      time.Time
 )
 
-func init() {
+func netInit() {
 	lastInterface = interfaceStat()
 	lastTime = time.Now()
 }
 
-func GetInterfaceStat() {
+func GetInterfaceStat() map[string]*Interface {
 	currentInterface := interfaceStat()
 	timeNow := time.Now()
 	for _, interfaceStat := range currentInterface {
@@ -51,12 +53,14 @@ func GetInterfaceStat() {
 		diff = float64(timeNow.UnixNano()/1e6-lastTime.UnixNano()/1e6) / 1000
 		recv = float64(interfaceStat.BytesRecv-last.BytesRecv) / diff / 1024
 		send = float64(interfaceStat.BytesSent-last.BytesSent) / diff / 1024
-		currentInterface[interfaceStat.Name].Recv = recv
-		currentInterface[interfaceStat.Name].Send = send
+		currentInterface[interfaceStat.Name].Recv = helper.ToFixed(recv)
+		currentInterface[interfaceStat.Name].Send = helper.ToFixed(send)
 	}
 
 	lastInterface = currentInterface
 	lastTime = timeNow
+
+	return currentInterface
 }
 
 func GetNetCount() int {
@@ -76,7 +80,12 @@ func interfaceStat() map[string]*Interface {
 	InterfaceStatList := loadInterfaceStatList()
 	ioCounters := loadCounters()
 	for _, interfaceStat := range InterfaceStatList {
+		if interfaceStat.Name == "lo" {
+			continue
+		}
+
 		ioCounter := getCounter(interfaceStat.Name, ioCounters)
+
 		i := &Interface{
 			Name:         interfaceStat.Name,
 			HardwareAddr: interfaceStat.HardwareAddr,

@@ -44,8 +44,5 @@ func GetDisk() []*device {
 		Disks = append(Disks, d)
 	}
 
-	logger.Info(Disks[0])
-	logger.Info(Disks[1])
-
 	return Disks
 }
