@@ -10,11 +10,13 @@ package route
 import (
 	"pi-monitor/api"
 	"pi-monitor/controller"
+	"pi-monitor/websocket"
 )
 
 func route() {
 	server.Gin.LoadHTMLGlob("views/**/*")
 	server.Gin.Static("static/", "static/")
 	server.Gin.GET("/", controller.Dashboard)
+	server.Gin.GET("/ws", websocket.HandleWebSocket)
 	server.Gin.GET("/api/get", api.Collect)
 }

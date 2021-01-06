@@ -21,6 +21,9 @@ github.com/go-playground/universal-translator
 github.com/go-playground/validator/v10
 # github.com/golang/protobuf v1.3.3
 github.com/golang/protobuf/proto
+# github.com/gorilla/websocket v1.4.2
+## explicit
+github.com/gorilla/websocket
 # github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
 # github.com/leodido/go-urn v1.2.0

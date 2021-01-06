@@ -3,6 +3,38 @@ $(document).ready(function() {
     var memUsage = echarts.init(document.getElementById('mem-usage'));
     var swapUsage = echarts.init(document.getElementById('swap-usage'));
 
+    var ws = new WebSocket("ws://" + document.location.host + "/ws"); 
+    //连接打开时触发 
+    ws.onopen = function(evt) {  
+        console.log("Connection open ...");  
+        ws.send("Hello WebSockets!");  
+    };  
+    //接收到消息时触发  
+    ws.onmessage = function(evt) { 
+        var msg = JSON.parse(evt.data);
+
+        cpuUsageOption.series[0].data[0].value = msg.CPU.Load.Percent.toFixed(1)
+        memUsageOption.series[0].data[0].value = msg.Memory.UsedPercent.toFixed(1)
+
+        cpuUsage.setOption(cpuUsageOption, true);
+        memUsage.setOption(memUsageOption, true);
+
+        $("#temp").text(msg.CPU.Temp+" C°");
+        $("#freq").text(msg.CPU.Freq.Curfreq+" MHz");
+        $("#idle").text(msg.CPU.Load.Idle.toFixed(1)+"%");
+        $("#user").text(msg.CPU.Load.User.toFixed(1)+"%");
+        $("#sys").text(msg.CPU.Load.Sys.toFixed(1)+"%");
+        $("#nice").text(msg.CPU.Load.Nice.toFixed(1)+"%");
+        $("#iow").text(msg.CPU.Load.Iowait.toFixed(1)+"%");
+        $("#irq").text(msg.CPU.Load.Irq.toFixed(1)+"%");
+        //console.log("Received Message: " + evt);
+        console.log(msg);
+    };  
+    //连接关闭时触发  
+    ws.onclose = function(evt) {  
+        console.log("Connection closed.");  
+    }; 
+
     cpuUsageOption = {
         tooltip: {
             formatter: '{a} <br/>{b} : {c}%'

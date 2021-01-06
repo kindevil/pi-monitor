@@ -23,14 +23,14 @@ type Freq struct {
 }
 
 type CPULoad struct {
-	Percent string
-	Idle    string
-	User    string
-	Sys     string
-	Nice    string
-	Iowait  string
-	Irq     string
-	Softirq string
+	Percent float64
+	Idle    float64
+	User    float64
+	Sys     float64
+	Nice    float64
+	Iowait  float64
+	Irq     float64
+	Softirq float64
 }
 
 var (
@@ -59,14 +59,14 @@ func cpuLoad() *CPULoad {
 	used_total := cur_total - last_total
 
 	cpuload := &CPULoad{
-		Percent: floatToString((1 - ((t.Idle - lastTimesStat.Idle) / used_total)) * 100),
-		Idle:    floatToString((t.Idle - lastTimesStat.Idle) / used_total * 100),
-		User:    floatToString((t.User - lastTimesStat.User) / used_total * 100),
-		Sys:     floatToString((t.System - lastTimesStat.System) / used_total * 100),
-		Nice:    floatToString((t.Nice - lastTimesStat.Nice) / used_total * 100),
-		Iowait:  floatToString((t.Iowait - lastTimesStat.Iowait) / used_total * 100),
-		Irq:     floatToString((t.Irq - lastTimesStat.Irq) / used_total * 100),
-		Softirq: floatToString((t.Softirq - lastTimesStat.Softirq) / used_total * 100),
+		Percent: (1 - ((t.Idle - lastTimesStat.Idle) / used_total)) * 100,
+		Idle:    (t.Idle - lastTimesStat.Idle) / used_total * 100,
+		User:    (t.User - lastTimesStat.User) / used_total * 100,
+		Sys:     (t.System - lastTimesStat.System) / used_total * 100,
+		Nice:    (t.Nice - lastTimesStat.Nice) / used_total * 100,
+		Iowait:  (t.Iowait - lastTimesStat.Iowait) / used_total * 100,
+		Irq:     (t.Irq - lastTimesStat.Irq) / used_total * 100,
+		Softirq: (t.Softirq - lastTimesStat.Softirq) / used_total * 100,
 	}
 	lastTimesStat = t
 	return cpuload
