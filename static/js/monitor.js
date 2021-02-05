@@ -10,7 +10,7 @@ $(document).ready(function() {
         ws.send("Hello WebSockets!");  
     };  
     //接收到消息时触发  
-    ws.onmessage = function(evt) { 
+    ws.onmessage = function(evt) {
         var msg = JSON.parse(evt.data);
 
         cpuUsageOption.series[0].data[0].value = msg.CPU.Load.Percent.toFixed(1)

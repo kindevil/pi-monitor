@@ -24,7 +24,33 @@ var upgrader = websocket.Upgrader{
 	HandshakeTimeout: time.Duration(time.Second * 5),
 }
 
-var Conn *websocket.Conn
+var Conns []*websocket.Conn
+
+func init() {
+	go func() {
+		for {
+			if len(Conns) < 1 {
+				time.Sleep(time.Second * 1)
+				continue
+			}
+
+			st := &statistics{
+				Host:   service.GetHost(),
+				CPU:    service.GetCPU(),
+				Memory: service.GetMem(),
+				Net:    service.GetNet(),
+			}
+
+			for _, conn := range Conns {
+				if conn != nil {
+					conn.WriteJSON(st)
+				}
+			}
+
+			time.Sleep(time.Millisecond * 100)
+		}
+	}()
+}
 
 func HandleWebSocket(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
@@ -34,47 +60,42 @@ func HandleWebSocket(c *gin.Context) {
 	}
 	defer conn.Close()
 
-	logger.Debug(conn)
+	Conns = append(Conns, conn)
 
-	Conn = conn
-
-	go Write()
+	//go Write(conn)
 
 	for {
 		msgType, msgData, err := conn.ReadMessage()
 		if err != nil {
-			logger.Error(err)
-			switch err.(type) {
-			case *websocket.CloseError:
-				Conn = nil
-				return
-			default:
-				Conn = nil
-				return
-			}
+			logger.Error("read:", err)
+			break
 		}
+
+		logger.Info("recv: %s", msgData)
 
 		if msgType != websocket.TextMessage {
 			continue
 		}
-
-		logger.Info("incoming message: %s\n", msgData)
 	}
 }
 
-func Write() {
+func Write(conn *websocket.Conn) {
 	for {
+		t1 := time.Now()
 		st := &statistics{
 			Host:   service.GetHost(),
 			CPU:    service.GetCPU(),
 			Memory: service.GetMem(),
 			Net:    service.GetNet(),
 		}
+		logger.Info("timesince:", time.Since(t1))
 
-		if Conn != nil {
-			Conn.WriteJSON(st)
+		if conn != nil {
+			conn.WriteJSON(st)
 		}
 
-		time.Sleep(time.Second * 1)
+		logger.Info("sendto:", conn.RemoteAddr().String())
+
+		time.Sleep(time.Millisecond * 100)
 	}
 }
