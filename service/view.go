@@ -19,7 +19,7 @@ func Index(c *gin.Context) {
 	data["boottime"] = host.BootTime
 	data["kernal"] = host.Kernal
 	data["netCount"] = host.InterfaceNum
-	data["disks"] = host.Disks
+	//data["disks"] = host.Disks
 
 	c.HTML(http.StatusOK, "home.tmpl", data)
 }

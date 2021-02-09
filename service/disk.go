@@ -5,7 +5,7 @@ import (
 	"github.com/wonderivan/logger"
 )
 
-type device struct {
+type Device struct {
 	Name        string
 	Mountpoint  string
 	Fstype      string
@@ -15,9 +15,11 @@ type device struct {
 	UsedPercent float64
 }
 
-var Disks []*device
+//var Disks []*Device
 
-func GetDisk() []*device {
+func GetDisk() []*Device {
+	var Disks []*Device
+
 	partitions, err := disk.Partitions(false)
 	if err != nil {
 		logger.Error(err)
@@ -25,7 +27,7 @@ func GetDisk() []*device {
 
 	for _, dev := range partitions {
 
-		d := &device{}
+		d := &Device{}
 		d.Name = dev.Device
 		d.Mountpoint = dev.Mountpoint
 		d.Fstype = dev.Fstype

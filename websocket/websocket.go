@@ -14,7 +14,8 @@ type statistics struct {
 	Host   *service.Host
 	CPU    *service.CPU
 	Memory *service.Memory
-	Net    *service.Net
+	Disks  []*service.Device
+	NetDev []*service.Inter
 }
 
 var upgrader = websocket.Upgrader{
@@ -38,7 +39,8 @@ func init() {
 				Host:   service.GetHost(),
 				CPU:    service.GetCPU(),
 				Memory: service.GetMem(),
-				Net:    service.GetNet(),
+				Disks:  service.GetDisk(),
+				NetDev: service.GetNet(),
 			}
 
 			for _, conn := range Conns {
@@ -86,7 +88,8 @@ func Write(conn *websocket.Conn) {
 			Host:   service.GetHost(),
 			CPU:    service.GetCPU(),
 			Memory: service.GetMem(),
-			Net:    service.GetNet(),
+			Disks:  service.GetDisk(),
+			NetDev: service.GetNet(),
 		}
 		logger.Info("timesince:", time.Since(t1))
 

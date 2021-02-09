@@ -8,17 +8,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"pi-monitor/device"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Dashboard(c *gin.Context) {
-	var data = gin.H{}
-	var host = device.GetHost()
-
-	data["title"] = host.Vendor + " Monitor"
-	data["host"] = host
-
-	c.HTML(http.StatusOK, "dashboard.tmpl", data)
+	c.HTML(http.StatusOK, "index.html", gin.H{})
 }

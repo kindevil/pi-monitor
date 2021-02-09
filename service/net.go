@@ -8,10 +8,10 @@ import (
 )
 
 type Net struct {
-	Interface []*inter
+	Interface []*Inter
 }
 
-type inter struct {
+type Inter struct {
 	Name         string
 	HardwareAddr string
 	Addrs        net.InterfaceAddrList
@@ -44,7 +44,7 @@ func loadNetStat() []net.IOCountersStat {
 // 	logger.Debug(netLastTime)
 // }
 
-func GetNet() *Net {
+func GetNet() []*Inter {
 
 	list, err := net.Interfaces()
 	if err != nil {
@@ -56,7 +56,8 @@ func GetNet() *Net {
 		logger.Error(err)
 	}
 
-	n := &Net{}
+	//n := &Net{}
+	var Interface []*Inter
 
 	time.Sleep(time.Second)
 
@@ -72,11 +73,11 @@ func GetNet() *Net {
 		if len(netLastStat) != 0 {
 			old := search(val.Name, netLastStat)
 			diff = float64(timeNow.UnixNano()/1e6-netLastTime.UnixNano()/1e6) / 1000
-			recv = float64(s.BytesRecv-old.BytesRecv) / diff / 1024
-			send = float64(s.BytesSent-old.BytesSent) / diff / 1024
+			recv = float64(s.BytesRecv-old.BytesRecv) / diff
+			send = float64(s.BytesSent-old.BytesSent) / diff
 		}
 
-		i := &inter{
+		i := &Inter{
 			Name:         val.Name,
 			HardwareAddr: val.HardwareAddr,
 			Addrs:        val.Addrs,
@@ -95,13 +96,13 @@ func GetNet() *Net {
 		// 	logger.Info("BytesSent:", s.BytesSent)
 		// 	logger.Info("BytesSent:", old.BytesSent)
 		// }
-		n.Interface = append(n.Interface, i)
+		Interface = append(Interface, i)
 	}
 
 	netLastStat = stat[:]
 	netLastTime = timeNow
 
-	return n
+	return Interface
 }
 
 func search(name string, stat []net.IOCountersStat) net.IOCountersStat {

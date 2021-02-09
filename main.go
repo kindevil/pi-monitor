@@ -12,9 +12,5 @@ import (
 )
 
 func main() {
-	//service.InitNetStat()
-	//service.GetNet()
-	// service.GetDisk()
-	// return
 	route.Run()
 }
