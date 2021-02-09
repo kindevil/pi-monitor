@@ -73,7 +73,7 @@ func HandleWebSocket(c *gin.Context) {
 			break
 		}
 
-		log.Info("recv: %s", msgData)
+		log.Infof("recv: %s", msgData)
 
 		if msgType != websocket.TextMessage {
 			continue
