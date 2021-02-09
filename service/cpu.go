@@ -5,7 +5,7 @@ import (
 
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
-	"github.com/wonderivan/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 type CPU struct {
@@ -41,7 +41,7 @@ var (
 func loadTimes() cpu.TimesStat {
 	t, err := cpu.Times(false)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 	return t[0]
 }
@@ -75,7 +75,7 @@ func cpuLoad() *CPULoad {
 func cpuTemperature() string {
 	temperatures, err := host.SensorsTemperatures()
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 	return floatToString(temperatures[0].Temperature)
 }
@@ -83,7 +83,7 @@ func cpuTemperature() string {
 func cpuCount(logical bool) int {
 	c, err := cpu.Counts(logical)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 	return c
 }
@@ -96,11 +96,11 @@ func getFreq(name string) float64 {
 
 	lines, err = ReadLines("/sys/devices/system/cpu/cpu0/cpufreq/" + name)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 	value, err = strconv.ParseFloat(lines[0], 64)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 	freq = value / 1000.0
 	if freq > 9999 {

@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/shirou/gopsutil/v3/disk"
-	"github.com/wonderivan/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 type Device struct {
@@ -22,7 +22,7 @@ func GetDisk() []*Device {
 
 	partitions, err := disk.Partitions(false)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 
 	for _, dev := range partitions {
@@ -34,7 +34,7 @@ func GetDisk() []*Device {
 
 		usage, err := disk.Usage(dev.Mountpoint)
 		if err != nil {
-			logger.Error(err)
+			log.Error(err)
 			continue
 		}
 

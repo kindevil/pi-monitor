@@ -7,7 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/wonderivan/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 type statistics struct {
@@ -57,7 +57,7 @@ func init() {
 func HandleWebSocket(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		return
 	}
 	defer conn.Close()
@@ -69,11 +69,11 @@ func HandleWebSocket(c *gin.Context) {
 	for {
 		msgType, msgData, err := conn.ReadMessage()
 		if err != nil {
-			logger.Error("read:", err)
+			log.Error(err)
 			break
 		}
 
-		logger.Info("recv: %s", msgData)
+		log.Info("recv: %s", msgData)
 
 		if msgType != websocket.TextMessage {
 			continue
@@ -91,13 +91,13 @@ func Write(conn *websocket.Conn) {
 			Disks:  service.GetDisk(),
 			NetDev: service.GetNet(),
 		}
-		logger.Info("timesince:", time.Since(t1))
+		log.Info("timesince:", time.Since(t1))
 
 		if conn != nil {
 			conn.WriteJSON(st)
 		}
 
-		logger.Info("sendto:", conn.RemoteAddr().String())
+		log.Info("sendto:", conn.RemoteAddr().String())
 
 		time.Sleep(time.Millisecond * 100)
 	}

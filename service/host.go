@@ -2,15 +2,13 @@ package service
 
 import (
 	"bufio"
-	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"time"
 
 	"github.com/shirou/gopsutil/v3/host"
-	"github.com/wonderivan/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 type Host struct {
@@ -44,7 +42,7 @@ func hostname() {
 	var name string
 	name, err := os.Hostname()
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 	hostInfo.Hostname = name
 }
@@ -94,7 +92,7 @@ func kernel() {
 	cmd := exec.Command("uname", "-a")
 	stdout, err := cmd.Output()
 	if err != nil {
-		logger.Info(err)
+		log.Error(err)
 	}
 	hostInfo.Kernal = strings.Trim(string(stdout), "\n")
 }
@@ -116,7 +114,7 @@ func netInterface() {
 func readLine(path string) string {
 	file, err := os.Open(path)
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 		return ""
 	}
 	defer file.Close()
@@ -132,7 +130,7 @@ func readLine(path string) string {
 func readOSRelease(keyward string) string {
 	file, err := os.Open("/etc/os-release")
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 	defer file.Close()
 
@@ -152,7 +150,7 @@ func readOSRelease(keyward string) string {
 func scanCpuInfo(keyward string) string {
 	file, err := os.Open("/proc/cpuinfo")
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 	defer file.Close()
 
@@ -173,7 +171,7 @@ func getInfo(path string) string {
 
 	file, err := os.Open(path)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 	defer file.Close()
 	var lineText string
@@ -240,7 +238,7 @@ func runningTime(t uint64) *UpTime {
 func getHost() {
 	info, err := host.Info()
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 
 	hostInfo = &Host{}

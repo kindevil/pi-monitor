@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/shirou/gopsutil/v3/net"
-	"github.com/wonderivan/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 type Net struct {
@@ -31,7 +31,7 @@ var (
 func loadNetStat() []net.IOCountersStat {
 	stat, err := net.IOCounters(true)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		return nil
 	}
 	return stat
@@ -48,12 +48,12 @@ func GetNet() []*Inter {
 
 	list, err := net.Interfaces()
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 
 	stat, err := net.IOCounters(true)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 
 	//n := &Net{}

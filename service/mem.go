@@ -9,7 +9,7 @@ package service
 
 import (
 	"github.com/shirou/gopsutil/v3/mem"
-	"github.com/wonderivan/logger"
+	log "github.com/sirupsen/logrus"
 )
 
 type Memory struct {
@@ -28,7 +28,7 @@ type Memory struct {
 func GetMem() *Memory {
 	v, err := mem.VirtualMemory()
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 
 	mem := &Memory{
